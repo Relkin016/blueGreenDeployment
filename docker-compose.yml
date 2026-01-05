@@ -1,0 +1,43 @@
+services:
+  proxy_nginx:
+    image: ${IMAGE}
+    ports:
+      - ${SSL_PORT}:${SSL_PORT}
+      - ${HTTP_PORT}:${HTTP_PORT}
+    environment:
+      - SSL_PORT=${SSL_PORT}
+      - HTTP_PORT=${HTTP_PORT}
+      - SSL_DIR=${SSL_DIR}
+      - CERT_FILE=test.pem
+      - KEY_FILE=test.key
+    depends_on:
+      - app_blue
+      - app_green
+    networks:
+      - ${NET_NAME}
+    volumes:
+      - ${PROXY_FILE}:${DEFAULT_NGX_CONF_FILE}:ro
+      - ${HOST_SSL_DIR}:${CERT_FILE}:${SSL_DIR}/{$CERT_FILE}:ro
+      - ${HOST_SSL_DIR}:${KEY_FILE}:${SSL_DIR}/{$KEY_FILE}:ro
+
+  app_blue:
+    image: ${IMAGE}
+    environment:
+      - PORT=${HTTP_PORT}
+    volumes:
+      - ${BLUE_FILE}:${DEFAULT_NGX_CONF_FILE}:ro
+    networks:
+      - {NET_NAME}
+
+  app_green:
+    image: ${IMAGE}
+    environment:
+      - PORT=${HTTP_PORT}
+    volumes:
+      - ${GREEN_FILE}:${DEFAULT_NGX_CONF_FILE}:ro
+    networks:
+      - ${NET_NAME}
+
+networks:
+  app_network: # Need to be edited with ${NET_NAME}
+    driver: bridge
