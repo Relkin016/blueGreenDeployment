@@ -13,11 +13,10 @@ http {
       return 301 https://$host$request_uri;
 
     server {
-      listen ${SSL_PORT} ssl;
-	ssl_certificate		${SSL_DIR}/${CERT_FILE};
-	ssl_certificate_key	${SSL_DIR}/${KEY_FILE};
-	
-	ssl_protocols       TLSv1.2 TLSv1.3;
+        listen ${SSL_PORT} ssl;
+	    ssl_certificate		${SSL_DIR}/${CERT_FILE};
+	    ssl_certificate_key	${SSL_DIR}/${KEY_FILE};
+	    ssl_protocols       TLSv1.2 TLSv1.3;
         ssl_ciphers         HIGH:!aNULL:!MD5;
 
 	location / {

@@ -1,29 +1,28 @@
 services:
-  app_blue:
+  app_green:
     image: ${IMAGE}
     depends_on:
       - ${FPM_HOSTNAME_GREEN}
     environment:
       - PORT=${HTTP_PORT}
-      - FPM_HOST=${FRM_HOSTNAME}
+      - FPM_HOST=${FPM_HOSTNAME_GREEN}
       - FPM_PORT=${FPM_PORT}
     volumes:
       - ${APP_GREEN_FILE}:${DEFAULT_NGX_CONF_FILE}:ro
-      - ${PHP_CONF_FILE}:${PHP_GREEN_FILE}:ro
-    ports:
-      - "${GREEN_PROD_PORT}:{SSL_PORT}
+      - ${PHP_GREEN_FILE}:${PHP_CONF_FILE}:ro
     networks:
       - ${NET_NAME}
 
-  fpm_blue:
-    build: .
+  fpm_green:
+    build: Dockerfile_green
     enviroment:
       - DB_PASS=${DB_PASS}
       - DB_USER=${DB_USER}
       - DB_NAME=${DB_NAME}
       - DB_TABLE=${DB_TABLE}
+      - DB_HOST=${DB_HOST}
     volumes:
-      - ${PHP_CONF_FILE}:${PHP_GREEN_FILE}:rw
+      - ${PHP_GREEN_FILE}:${PHP_CONF_FILE}:rw
     networks:
       - ${NET_NAME}
 

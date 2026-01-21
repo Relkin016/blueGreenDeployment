@@ -1,19 +1,16 @@
 server {
-    listen 443 ssl;
+    listen 80;
     server_name _;
 
     root /usr/share/nginx/html/    
     index index.php index.html index.htm;
-
-    ssl_certificate /etc/ssl/test.pem;
-    ssl_certificate_key /etc/ssl/test.key;
 
     location / {
         try_files $uri $uri/ =404;
     }
 
     location ~ \.php$ {
-    fastcgi_pass ${FPM_HOSTNAME}:${FPM_PORT}; 
+    fastcgi_pass ${FPM_HOSTNAME_BLUE}:${FPM_PORT}; 
     fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
     include fastcgi_params; 
 }

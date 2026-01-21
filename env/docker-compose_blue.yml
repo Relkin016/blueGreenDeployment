@@ -5,25 +5,24 @@ services:
       - ${FPM_HOSTNAME_BLUE}
     environment:
       - PORT=${HTTP_PORT}
-      - FPM_HOST=${FPM_HOSTNAME}
+      - FPM_HOST=${FPM_HOSTNAME_BLUE}
       - FPM_PORT=${FPM_PORT}
     volumes:
-      - ${BLUE_FILE}:${DEFAULT_NGX_CONF_FILE}:ro
-      - ${PHP_CONF_FILE}:${PHP_BLUE_FILE}:ro
-    ports:
-      - "${BLUE_PROD_PORT}:${SSL_PORT}"
+      - ${APP_BLUE_FILE}:${DEFAULT_NGX_CONF_FILE}:ro
+      - ${PHP_BLUE_FILE}:${PHP_CONF_FILE}:ro
     networks:
       - ${NET_NAME}
 
   fpm_blue:
-    build: .
+    build: Dockerfile_blue
     enviroment:
       - DB_PASS=${DB_PASS}
       - DB_USER=${DB_USER}
       - DB_NAME=${DB_NAME}
       - DB_TABLE=${DB_TABLE}
+      - DB_HOST=${DB_HOST}
     volumes:
-      - ${PHP_CONF_FILE}:${PHP_BLUE_FILE}:rw
+      - ${PHP_BLUE_FILE}:${PHP_CONF_FILE}:rw
     networks:
       - ${NET_NAME}
 

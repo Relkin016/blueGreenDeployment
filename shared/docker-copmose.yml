@@ -9,22 +9,24 @@ services:
       - SSL_PORT=${SSL_PORT}
       - HTTP_PORT=${HTTP_PORT}
       - SSL_DIR=${SSL_DIR}
-      - CERT_FILE=test.pem
-      - KEY_FILE=test.key
-    networks:
-      - ${NET_NAME}
+      - CERT_FILE=${CERT_FILE}
+      - KEY_FILE=${KEY_FILE}
     volumes:
       - ${PROXY_FILE}:${DEFAULT_NGX_CONF_FILE}:ro
       - ${HOST_SSL_DIR}:${CERT_FILE}:${SSL_DIR}/{$CERT_FILE}:ro
       - ${HOST_SSL_DIR}:${KEY_FILE}:${SSL_DIR}/{$KEY_FILE}:ro
+    networks:
+      - ${NET_NAME}
 
-  test_db:
-    image: mysql
+  mysql:
+    build: mysql/.
     restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: ${ROOT_PASSWORD}
       MYSQL_DATABASE: ${DB_NAME}
       MYSQL_USER: ${USER_NAME}
       MYSQL_PASSWORD: ${USER_PASS}
-
-# add mysql roman privs, add to net
+    volumes: 
+      - ${DB_DATA_LOCAL}:${DB_DATA_DOCKER}:rw    
+    networks:
+      - ${NET_NAME}
