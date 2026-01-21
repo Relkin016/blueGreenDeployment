@@ -1,0 +1,33 @@
+services:
+  app_blue:
+    image: ${IMAGE}
+    depends_on:
+      - ${FPM_HOSTNAME_GREEN}
+    environment:
+      - PORT=${HTTP_PORT}
+      - FPM_HOST=${FRM_HOSTNAME}
+      - FPM_PORT=${FPM_PORT}
+    volumes:
+      - ${APP_GREEN_FILE}:${DEFAULT_NGX_CONF_FILE}:ro
+      - ${PHP_CONF_FILE}:${PHP_GREEN_FILE}:ro
+    ports:
+      - "${GREEN_PROD_PORT}:{SSL_PORT}
+    networks:
+      - ${NET_NAME}
+
+  fpm_blue:
+    build: .
+    enviroment:
+      - DB_PASS=${DB_PASS}
+      - DB_USER=${DB_USER}
+      - DB_NAME=${DB_NAME}
+      - DB_TABLE=${DB_TABLE}
+    volumes:
+      - ${PHP_CONF_FILE}:${PHP_GREEN_FILE}:rw
+    networks:
+      - ${NET_NAME}
+
+
+networks:
+  app_network: # Need to be edited with ${NET_NAME}
+    driver: bridge

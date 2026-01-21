@@ -1,6 +1,7 @@
 services:
   proxy_nginx:
-    image: ${IMAGE}
+    image: nginx
+    restart: unless-stopped
     ports:
       - ${SSL_PORT}:${SSL_PORT}
       - ${HTTP_PORT}:${HTTP_PORT}
@@ -10,9 +11,6 @@ services:
       - SSL_DIR=${SSL_DIR}
       - CERT_FILE=test.pem
       - KEY_FILE=test.key
-    depends_on:
-      - app_blue
-      - app_green
     networks:
       - ${NET_NAME}
     volumes:
@@ -20,24 +18,13 @@ services:
       - ${HOST_SSL_DIR}:${CERT_FILE}:${SSL_DIR}/{$CERT_FILE}:ro
       - ${HOST_SSL_DIR}:${KEY_FILE}:${SSL_DIR}/{$KEY_FILE}:ro
 
-  app_blue:
-    image: ${IMAGE}
+  test_db:
+    image: mysql
+    restart: unless-stopped
     environment:
-      - PORT=${HTTP_PORT}
-    volumes:
-      - ${BLUE_FILE}:${DEFAULT_NGX_CONF_FILE}:ro
-    networks:
-      - {NET_NAME}
+      MYSQL_ROOT_PASSWORD: ${ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${USER_NAME}
+      MYSQL_PASSWORD: ${USER_PASS}
 
-  app_green:
-    image: ${IMAGE}
-    environment:
-      - PORT=${HTTP_PORT}
-    volumes:
-      - ${GREEN_FILE}:${DEFAULT_NGX_CONF_FILE}:ro
-    networks:
-      - ${NET_NAME}
-
-networks:
-  app_network: # Need to be edited with ${NET_NAME}
-    driver: bridge
+# add mysql roman privs, add to net
