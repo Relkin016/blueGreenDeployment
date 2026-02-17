@@ -15,7 +15,7 @@ services:
 
   fpm_green:
     build: Dockerfile_green
-    enviroment:
+    environment:
       - DB_PASS=${DB_PASS}
       - DB_USER=${DB_USER}
       - DB_NAME=${DB_NAME}

@@ -15,7 +15,7 @@ services:
 
   fpm_blue:
     build: Dockerfile_blue
-    enviroment:
+    environment:
       - DB_PASS=${DB_PASS}
       - DB_USER=${DB_USER}
       - DB_NAME=${DB_NAME}
