@@ -13,8 +13,8 @@ services:
       - KEY_FILE=${KEY_FILE}
     volumes:
       - ${PROXY_FILE}:${DEFAULT_NGX_CONF_FILE}:ro
-      - ${HOST_SSL_DIR}:${CERT_FILE}:${SSL_DIR}/{$CERT_FILE}:ro
-      - ${HOST_SSL_DIR}:${KEY_FILE}:${SSL_DIR}/{$KEY_FILE}:ro
+      - ${HOST_SSL_DIR}/${CERT_FILE}:${SSL_DIR}/${CERT_FILE}:ro
+      - ${HOST_SSL_DIR}/${KEY_FILE}:${SSL_DIR}/${KEY_FILE}:ro
     networks:
       - ${NET_NAME}
 
